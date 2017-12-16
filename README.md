@@ -53,103 +53,9 @@
 >
 4. 可查看/h2-console,查看其内存数据库中的数据
 
-#### ElasticSearch
-* 近实时 索引建立后,每隔x秒写入,一般设置为1s左右
-* 分片 将索引分片存储,并建立副本
-
-1. 引入依赖
->
-    	compile('org.springframework.boot:spring-boot-starter-data-elasticsearch')
-    	
-    	ext['elasticsearch.version']='6.0.0' 版本和服务器安装的版本一致
->
-
-2. 新建实体类
->
-    /**
-     * author:ZhengXing
-     * datetime:2017-12-04 21:15
-     * es文档类
-     */
-    @Document(indexName = "blog",type = "blog")
-    @Data
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)//防止直接使用
-    public class EsBlog implements Serializable{
-        @Id
-        private String id;//string的id
-        private String title;
-        private String summary;//摘要
-        private String content;
-    
-        public EsBlog(String title, String summary, String content) {
-            this.title = title;
-            this.summary = summary;
-            this.content = content;
-        }
-    }
->
-
-3. 数据操作类:
-和spring data jpa类似,都是被springData包装过的
->
-    /**
-     * author:ZhengXing
-     * datetime:2017-12-04 21:22
-     * es博客 文档
-     */
-    public interface EsBlogRepository extends ElasticsearchRepository<EsBlog,String> {
-    
-        /**
-         * 查询不重复的,标题包含,或摘要包含,或正文包含该字符的分页的数据
-         *
-         * @return
-         */
-        Page<EsBlog> findDistinctEsBlogByTitleContainingOrSummaryContainingOrContentContaining(
-                String title, String summary, String content, Pageable pageable
-        );
-    }
->
-
-#### Elasticsearch 安装
-1. 解压
-2. 创建用户
->
-    useradd zx  创建名为zx的用户
-    passwd zx 给zx设置密码
-    su zx 切换到zx用户
-    
-    切换到root
-    chown zx /zx/elasticsearch-6.0.0 -R 给zx权限
->
-
-3. elasticsearch.yml 增加 network.host: 0.0.0.0
-
-4.  max file descriptors [65535] for elasticsearch process is too low, increase to at least [65536]
-root用户下 
-vim /etc/security/limits.conf 
-在末尾增加
->
-    * soft nofile 65536
-    * hard nofile 65536
-    * soft nproc 2048
-    * hard nproc 4096
->
-
-5. max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
-vim /etc/sysctl.conf 
-sysctl -p
 
 
-5.启动 sh ./bin/elasticsearch
 
-6. 访问http://106.14.7.29:9200 即可看到信息
-
-7. 停止   
-JPS 看进程号  
-kill  -9  进程号  
-
-* 需要注意的是spring boot stater data elasticsearch 中整合的是2.4.6版本的elasticsearch.需要安装最低支持版本的才能操作.  
-如果需要使用最新版,就无法使用spring data框架
 
 
 #### 前端框架
@@ -196,4 +102,11 @@ kill  -9  进程号
 #### 总结
 这个教程买得贼亏,就照着写了前面的一点,几乎没有什么出彩的地方.
 后面那老师自己都是狂粘贴.我全部快进看了.一无是处.
+
+
+
+
+
+
+
 
