@@ -6,7 +6,7 @@
 #### 奇淫巧技
 * ResponseEntity. 该类可以无需在方法上加@ResponseBody注解,然后返回实体和状态码
 
-* 直接在resource下放上名为favicon.ico,即可改变网站图标
+* 直接在resources/static下放上名为favicon.ico,即可改变网站图标
 
 * @AutoConfigureMockMvc
 
